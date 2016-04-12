@@ -1,0 +1,139 @@
+<html ng-app="AngularAssignment">
+    <head>
+        <!-- calling in angular library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.17/angular.min.js"></script>
+        <script lang="javascript">
+        
+            //setting up myModule to work with AngularJs
+            var myModule = angular.module('AngularAssignment', []);
+            
+            myModule.controller('TotalController', function ($scope) {
+                    
+                    
+                    //myModule.controller('TotalController')
+                    
+                    //declaring variables
+                    var tc = this;
+                    
+                    tc.cost = 50;
+                    tc.add_tax = true;
+                    tc.tip_amount1 = 0;
+                    tc.tip_amount2 = 0;
+                    tc.tip_amount3 = 0;
+                    tc.total_bill1 = 0;
+                    tc.total_bill2 = 0;
+                    tc.total_bill3 = 0;
+                    
+                    //update function, includes tip calcuations 
+                    function update(){
+                        tc.tax = tc.add_tax ? tc.cost * 0.15 : 0.0;    
+                        tc.tip_amount1 = tc.cost * .1;
+                        tc.tip_amount2 = tc.cost * .15;
+                        tc.tip_amount3 = tc.cost * .20;
+                        tc.total1 = parseFloat(tc.cost) + tc.tax + tc.tip_amount1 + tc.state.amount; 
+                        tc.total2 = parseFloat(tc.cost) + tc.tax + tc.tip_amount2 + tc.state.amount; 
+                        tc.total3 = parseFloat(tc.cost) + tc.tax + tc.tip_amount3 + tc.state.amount; 
+                    }
+                    
+                    //used to detect when cost changes
+                    $scope.$watch('tc.cost', update);
+                    $scope.$watch('tc.add_tax', update);
+                    $scope.$watch('tc.tip_amount1', update);
+                    $scope.$watch('tc.tip_amount2', update);
+                    $scope.$watch('tc.tip_amount3', update);
+                    $scope.$watch('tc.cost + tc.tax', update);
+                    $scope.$watch('tc.state', update)
+                    
+                    //total bill
+                    tc.total_bill1 = 0.0;
+                    tc.total_bill2 = 0.0;
+                    tc.total_bill3 = 0.0;
+                    tc.add = function add(){
+                        tc.total_bill1 += tc.total1;   
+                        //tc.total_bill1 = tc.total1 + tc.total_bill1;
+                        tc.total_bill2 += tc.total2;
+                        tc.total_bill3 += tc.total3;
+                    }
+                    
+                    //State taxes
+                    tc.state_taxes = [
+                        {amount:.4, name:"Alabama"},
+                        {amount:.560, name:"Arizona"},
+                        {amount:.650, name:"Arkansas"},
+                        {amount:.750, name:"California"},
+                        {amount:.290, name:"Colorado"},
+                        {amount:.635, name:"Connecticut"},
+                        {amount:.6, name:"Florida"},
+                        {amount:.4, name:"Georgia"},
+                        {amount:.6, name:"Idaho"},
+                        {amount:.625, name:"Illinois"},
+                        {amount:.7, name:"Indiana"},
+                        {amount:.6, name:"Iowa"},
+                        {amount:.615, name:"Kansas"},
+                        {amount:.6, name:"Kentucky"},
+                        {amount:.4, name:"Louisiana"},
+                        {amount:.550, name:"Maine"},
+                        {amount:.6, name:"Maryland"},
+                        {amount:.625, name:"Massachusetts"},
+                        {amount:.6, name:"Michigan"},
+                        {amount:.6875, name:"Minnesota"},
+                        {amount:.7, name:"Mississippi"},
+                        {amount:.550, name:"Nebraska"},
+                        {amount:.685, name:"Nevada"},
+                        {amount:.7, name:"New Jersey"},
+                        {amount:.5125, name:"New Mexico"},
+                        {amount:.4, name:"New York"},
+                        {amount:.475, name:"North Carolina"},
+                        {amount:.5, name:"North Dakota"},
+                        {amount:.575, name:"Ohio"},
+                        {amount:.450, name:"Oklahoma"},
+                        {amount:.6, name:"Pennsylvania"},
+                        {amount:.7, name:"Rhode Island"},
+                        {amount:.6, name:"South Carolina"},
+                        {amount:.4, name:"South Dakota"},
+                        {amount:.7, name:"Tennessee"},
+                        {amount:.625, name:"Texas"},
+                        {amount:.595, name:"Utah"},
+                        {amount:.6, name:"Vermont"},
+                        {amount:.530, name:"Virginia"},
+                        {amount:.650, name:"Washington"},
+                        {amount:.5, name:"Wisconsin"},
+                        {amount:.4, name:"Wyoming"},
+                        {amount:.575, name:"D.C."}
+                    ];
+                    
+                    tc.state = tc.state_taxes[0];
+                }
+            );
+        </script>
+    </head>
+    <body>
+        <div ng-controller="TotalController as tc">
+            <input type="checkbox" ng-model="tc.add_tax" />Add Tax
+            <input type="checkbox" ng-model="tc.total_bill" />Show Running Total
+            <p>
+                Cost: <input type="text" ng-model="tc.cost" placeholder="cost" /><br/>
+                State Taxes: <select ng-model="tc.state" ng-options="s.name for s in tc.state_taxes"></select>
+            </p>
+            <p>
+                This is your bill cost: {{tc.cost|currency}}
+            </p>
+            <p>
+                10% Tip amount 1: {{tc.tip_amount1|currency}}
+            </p>
+            <p>
+                15% Tip amount 2: {{tc.tip_amount2|currency}}
+            </p>
+            <p>
+                20% Tip amount 3: {{tc.tip_amount3|currency}}
+            </p>
+            <p ng-show="tc.total_bill">
+                <p>Total with tip 1: {{tc.total1|currency}}</p>
+                
+                <p>Total with tip 2: {{tc.total2|currency}}</p>
+                
+                <p>Total with tip 3: {{tc.total3|currency}}</p>
+            </p>
+        </div>
+    </body>
+</html>
